@@ -1,4 +1,4 @@
-package com.dongguabai.dongguabaitask.server.persistence.repository;
+package com.dongguabai.dongguabaitask.server.persistence;
 
 import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.common.MySqlMapper;

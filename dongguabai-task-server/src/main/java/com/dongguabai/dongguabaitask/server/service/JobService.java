@@ -37,6 +37,9 @@ public class JobService {
     private RestTemplate restTemplate;
 
     public void genJobs(List<String> taskNames, List<String> datas, Node node) {
+        System.out.println("genJobs........");
+        System.out.println("taskNames..."+taskNames);
+        System.out.println("datas...."+datas);
         if (taskNames == null || taskNames.isEmpty()){
             return;
         }
@@ -65,6 +68,7 @@ public class JobService {
             }).collect(Collectors.toList());
             jobList.addAll(jobs);
         }
+        System.out.println(jobList);
         jobMapper.insertList(jobList);
     }
 

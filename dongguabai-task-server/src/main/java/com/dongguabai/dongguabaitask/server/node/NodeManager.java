@@ -12,6 +12,7 @@ import org.springframework.boot.web.context.WebServerInitializedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -58,7 +59,7 @@ public class NodeManager implements ApplicationListener<WebServerInitializedEven
             address = "127.0.0.1:" + port;
             //注册 task-server
             registTaskServer(address);
-            TimeUnit.SECONDS.sleep(2);
+            TimeUnit.SECONDS.sleep(10);
             vote();
             //钩子
             hook();
@@ -72,12 +73,15 @@ public class NodeManager implements ApplicationListener<WebServerInitializedEven
                         log.info("CHILD_REMOVED....");
                         String removedPath = changeEvent.getData().getPath();
                         vote();
+                        System.out.println("节点删除....."+removedPath);
+                        System.out.println(NODE);
+                        removedPath = removedPath.replaceAll(SERVER_PATH+"/","");
                         if (NODE.isMaster() && NODE.isAvailable()){
                             jobService.masterTakeOver(NODE.getNodePath(),removedPath);
                         }
                         break;
                     case CHILD_ADDED:
-                        log.info("CHILD_REMOVED....");
+                        log.info("CHILD_ADDED....");
                         vote();
                         break;
                     default:
@@ -142,7 +146,8 @@ public class NodeManager implements ApplicationListener<WebServerInitializedEven
             long currentMs = System.currentTimeMillis();
             try {
                 //获取任务列表
-                List<String> nodeTasks = getNodeTasks(NODE.getSeq());
+                List<String> list = zkClient.getChildren().forPath(TASK_ROOT_PATH);
+                List<String> nodeTasks = getNodeTasks(list,NODE.getSeq(),servers.size());
                 List<String> dataList = nodeTasks.stream().map(taskName -> {
                     try {
                         byte[] bytes = zkClient.getData().forPath(TASK_ROOT_PATH + "/" + taskName);
@@ -161,7 +166,7 @@ public class NodeManager implements ApplicationListener<WebServerInitializedEven
     }
 
 
-    private List<String> getNodeTasks(int seq) throws Exception {
+    private List<String> getNodeTasks2(int seq) throws Exception {
         List<String> list = zkClient.getChildren().forPath(TASK_ROOT_PATH);
         int serverSize = servers.size();
 
@@ -184,27 +189,29 @@ public class NodeManager implements ApplicationListener<WebServerInitializedEven
         }));
     }
 
+/*    public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+       list.add("a");
+       list.add("b");
+       list.add("c");
+       list.add("d");
+       list.add("e");
+        getNodeTasks(list, 1, 3);
 
- /*   public static void main(String[] args) {
-        List<Integer> list = new ArrayList<>();
-        for (int i = 0; i < 14; i++) {
-            list.add(i);
-        }
-        test(list, 2, 3);
+    }*/
 
-    }
-
-    private static void test(List<Integer> list, int seq, int serverSize) {
+    private static List<String> getNodeTasks(List<String> list, int seq, int serverSize) {
         int taskSize = list.size();
         int avNum = taskSize / serverSize;
         int more = taskSize % serverSize;
 
-        List<Integer> avList = list.subList(seq * avNum, seq * avNum + avNum);
+        List<String> avList = list.subList(seq * avNum, seq * avNum + avNum);
         if (more != 0 && more - 1 == seq) {
 
             avList.add(list.get(avNum * serverSize + seq));
         }
         System.out.println(avList);
-    }*/
+        return avList;
+    }
 
 }

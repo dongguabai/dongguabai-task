@@ -63,6 +63,6 @@ logging:
   level:
     java.sql: debug
     com.apache.ibatis: debug
-    com.xiaomi.spark.plan.persistence.mapper: debug
+    com.dongguabai.dongguabaitask.server.persistence.repository: debug
 server:
-  port: 0
+  port: 9090

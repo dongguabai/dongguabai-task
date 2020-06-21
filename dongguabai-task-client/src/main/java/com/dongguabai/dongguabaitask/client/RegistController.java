@@ -63,9 +63,9 @@ public class RegistController implements ApplicationListener<WebServerInitialize
         port = event.getWebServer().getPort();
         simpleTaskRegist.regist("a","0 */1 * * * ?","127.0.0.1:"+port+"-a");
         simpleTaskRegist.regist("b","0 */2 * * * ?","127.0.0.1:"+port+"-b");
-        simpleTaskRegist.regist("c","0 */3 * * * ?","127.0.0.1:"+port+"-c");
-        simpleTaskRegist.regist("d","0 */4 * * * ?","127.0.0.1:"+port+"-d");
-        simpleTaskRegist.regist("e","0 */5 * * * ?","127.0.0.1:"+port+"-e");
+        simpleTaskRegist.regist("c","0 */1 * * * ?","127.0.0.1:"+port+"-c");
+        simpleTaskRegist.regist("d","0 */2 * * * ?","127.0.0.1:"+port+"-d");
+        simpleTaskRegist.regist("e","0 */1 * * * ?","127.0.0.1:"+port+"-e");
     }
 
 

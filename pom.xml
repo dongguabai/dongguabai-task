@@ -13,7 +13,7 @@
         <version>2.3.1.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.dongguabai</groupId>
+    <groupId>io.github.dongguabai</groupId>
     <artifactId>dongguabai-task</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>dongguabai-task</name>

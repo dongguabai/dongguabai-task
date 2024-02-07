@@ -55,7 +55,7 @@ pagehelper:
   params: count=countSql
 
 mapper:
-  mappers: com.dongguabai.dongguabaitask.server.persistence.GenericMapper
+  mappers: io.github.dongguabai.server.persistence.GenericMapper
   not-empty: true
   identity: MYSQL
 
